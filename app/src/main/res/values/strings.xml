@@ -1,3 +1,25 @@
 <resources>
     <string name="app_name">DigitalCloset</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string-array name="huku_syurui">
+        <item>Tシャツ</item>
+        <item>スーツ</item>
+        <item>ジャケット</item>
+        <item>ズボン</item>
+        <item>短パン</item>
+    </string-array>
+
+    <string-array name="huku_iro">
+        <item>赤色</item>
+        <item>青色</item>
+        <item>黄色</item>
+        <item>黒色</item>
+        <item>緑色</item>
+        <item>深緑</item>
+        <item>白色</item>
+        <item>灰色</item>
+    </string-array>
+
 </resources>

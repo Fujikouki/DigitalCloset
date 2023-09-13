@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".BlankFragment"
+    android:orientation="vertical">
+
+
+
+ <TextView
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"
+       android:text="服の種類を入力して下さい"/>
+
+ <Spinner
+        android:id="@+id/spinner_huku"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:entries="@array/huku_syurui"/>
+
+
+ <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="色"/>
+
+
+ <Spinner
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/spinner_iro"
+        android:entries="@array/huku_iro"/>
+
+
+ <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="名前"/>
+
+
+ <EditText
+        android:id="@+id/huku_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="text"/>
+
+
+ <Button
+     android:id="@+id/savebutton"
+     android:layout_width="match_parent"
+     android:layout_height="wrap_content"
+     android:text="保存"/>
+
+
+
+
+
+
+
+
+</LinearLayout>

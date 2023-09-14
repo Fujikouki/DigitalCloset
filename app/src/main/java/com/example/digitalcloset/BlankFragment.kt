@@ -16,6 +16,8 @@ import android.widget.TextView
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
 
+private const val s = "hukuname"
+
 /**
  * A simple [Fragment] subclass.
  * Use the [BlankFragment.newInstance] factory method to
@@ -71,7 +73,23 @@ class BlankFragment : Fragment() {
             Log.d("seikou",hukuiro)
             Log.d("seikou",hukusyu)
             Log.d("seikou",hukuname)
-            
+
+            val bundle = Bundle()
+
+            bundle.putString("hukusyu",hukusyu)
+            bundle.putString("hukuiro",hukuiro)
+            bundle.putString("hukuname",hukuname)
+
+            val transaction = parentFragmentManager.beginTransaction()
+
+            transaction.setReorderingAllowed(true)
+
+            transaction.addToBackStack("Only LIst")
+
+            transaction.replace(R.id.MinFragment,MainFragment::class.java,bundle)
+
+            transaction.commit()
+
 
         }
     }

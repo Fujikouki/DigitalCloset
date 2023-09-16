@@ -7,7 +7,7 @@
 
     <Button
         android:id="@+id/bcButton"
-        android:text="戻る"
+        android:text="服を登録する"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         />

@@ -1,23 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content">
-
-    <ImageView
-        android:id="@+id/oneIm"
-        android:layout_width="300dp"
-        android:layout_height="300dp"
-        android:background="@drawable/ic_launcher_background"/>
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@drawable/ic_launcher_background">
 
     <TextView
-        android:id="@+id/oneTe"
+        android:id="@+id/clothes_type"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="テスト"
-        android:layout_marginTop="30dp"
-        android:layout_marginLeft="25dp"/>
+        android:text="テスト"/>
+
+    <TextView
+        android:id="@+id/clothes_color"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="服の色"/>
+
+    <TextView
+        android:id="@+id/clothes_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="服の名前"/>
 
 
 
-</FrameLayout>
+</LinearLayout>

@@ -25,6 +25,7 @@ class MainFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
         val hukusyu = arguments?.getString("hukusyu")?:""
         val hukuiro = arguments?.getString("hukuiro")?:""
         val hukuname = arguments?.getString("hukuname")?:""
@@ -32,13 +33,10 @@ class MainFragment : Fragment() {
         Log.d("mainfragment",hukusyu)
         Log.d("mainfragment",hukuname)
 
-
-
         val rootView = inflater.inflate(R.layout.fragment_main, container, false)
 
         val bcButton = rootView.findViewById<Button>(R.id.bcButton)
         bcButton.setOnClickListener(bccreta())
-
         recyclerView = rootView.findViewById(R.id.recvi)
         recyclerView.adapter = recyclerAdapter
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
@@ -51,18 +49,7 @@ class MainFragment : Fragment() {
     private inner class bccreta: View.OnClickListener{
         override fun onClick(view: View) {
 
-            val transaction = parentFragmentManager.beginTransaction()
-
-            transaction.setReorderingAllowed(true)
-
-            transaction.addToBackStack("Only LIst")
-
-            val bundle = Bundle()
-
-            transaction.replace(R.id.MinFragment,BlankFragment::class.java,bundle)
-
-            transaction.commit()
-
+            parentFragmentManager.popBackStack()
 
         }
     }

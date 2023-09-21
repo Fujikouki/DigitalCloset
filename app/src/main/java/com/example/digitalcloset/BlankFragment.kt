@@ -13,7 +13,6 @@ import android.widget.TextView
 
 class BlankFragment : Fragment() {
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -39,7 +38,7 @@ class BlankFragment : Fragment() {
     private inner class SaveListener:View.OnClickListener{
         override fun onClick(view: View?) {
 
-            Log.d("save", view.toString())
+//            Log.d("save", view.toString())
 
             val hukuSpsyu = view?.findViewById<Spinner>(R.id.spinner_huku) ?: requireView().findViewById(R.id.spinner_huku)
             val hukuSpiro = view?.findViewById<Spinner>(R.id.spinner_iro) ?: requireView().findViewById(R.id.spinner_iro)
@@ -62,10 +61,15 @@ class BlankFragment : Fragment() {
             bundle.putString("hukuiro",hukuiro)
             bundle.putString("hukuname",hukuname)
 
+            val transaction = parentFragmentManager.beginTransaction()
 
-
-            parentFragmentManager.popBackStack()
-
+//            transaction.setReorderingAllowed(true)
+//
+//            transaction.addToBackStack("Only LIst")
+//
+//            transaction.replace(R.id.MinFragment,MainFragment::class.java,bundle)
+//
+//            transaction.commit()
 
         }
     }

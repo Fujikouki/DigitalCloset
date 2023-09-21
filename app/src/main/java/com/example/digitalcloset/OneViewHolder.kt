@@ -8,7 +8,8 @@ import com.example.digitalcloset.databinding.OneViewBinding
 
 class OneViewHolder(view: View):RecyclerView.ViewHolder(view) {
 
-    val oneImage = view.findViewById<ImageView>(R.id.oneIm)
-    val oneText = view.findViewById<TextView>(R.id.oneTe)
+    val clothes_type = view.findViewById<TextView>(R.id.clothes_type)
+    val clothes_color = view.findViewById<TextView>(R.id.clothes_color)
+    val clothes_name = view.findViewById<TextView>(R.id.huku_name)
 
 }

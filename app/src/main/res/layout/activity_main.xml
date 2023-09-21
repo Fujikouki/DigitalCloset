@@ -6,4 +6,3 @@
     android:layout_height="match_parent"
     android:name="com.example.digitalcloset.BlankFragment"/>
 
-

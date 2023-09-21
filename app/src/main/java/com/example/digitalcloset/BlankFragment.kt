@@ -1,5 +1,6 @@
 package com.example.digitalcloset
 
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -9,23 +10,16 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Spinner
-import android.widget.TextView
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-private const val s = "hukuname"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [BlankFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class BlankFragment : Fragment() {
 
-    private var namelist = listOf<String>()
+
+    private lateinit var _helper: Database
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        _helper = Database(requireContext())
+    }
+    private var _hukuId = -1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,14 +33,10 @@ class BlankFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
-
-
         val rootView = inflater.inflate(R.layout.fragment_blank, container, false)
 
         val saveButton = rootView.findViewById<Button>(R.id.savebutton)
         val listener = SaveListener()
-
-
 
         saveButton.setOnClickListener(listener)
 
@@ -56,8 +46,7 @@ class BlankFragment : Fragment() {
     private inner class SaveListener:View.OnClickListener{
         override fun onClick(view: View?) {
 
-            Log.d("save", view.toString())
-
+//            Log.d("save", view.toString())
 
             val hukuSpsyu = view?.findViewById<Spinner>(R.id.spinner_huku) ?: requireView().findViewById(R.id.spinner_huku)
             val hukuSpiro = view?.findViewById<Spinner>(R.id.spinner_iro) ?: requireView().findViewById(R.id.spinner_iro)
@@ -80,6 +69,28 @@ class BlankFragment : Fragment() {
             bundle.putString("hukuiro",hukuiro)
             bundle.putString("hukuname",hukuname)
 
+
+
+            fun stringToIntHash(input: String): Int {
+                // 文字列をハッシュコードに変換します
+                val hashCode = input.hashCode()
+
+                // ハッシュコードをINT型の範囲に収める
+                return hashCode and Int.MAX_VALUE
+            }
+
+            _hukuId = stringToIntHash(hukuname)
+
+            val db = _helper.writableDatabase
+            val sqlInsert = "INSERT INTO clothesmemos (_id, clothes_name, clothes_type, clothes_color) VALUES (?, ?, ?, ?)"
+            val stmt = db.compileStatement(sqlInsert)
+
+            stmt.bindLong(1,_hukuId.toLong())
+            stmt.bindString(2,hukuname)
+            stmt.bindString(3,hukusyu)
+            stmt.bindString(4,hukuiro)
+            stmt.executeInsert()
+
             val transaction = parentFragmentManager.beginTransaction()
 
             transaction.setReorderingAllowed(true)
@@ -90,8 +101,12 @@ class BlankFragment : Fragment() {
 
             transaction.commit()
 
-
         }
+    }
+
+    override fun onDestroy() {
+        _helper.close()
+        super.onDestroy()
     }
 
 }

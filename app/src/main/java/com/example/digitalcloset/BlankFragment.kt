@@ -69,8 +69,6 @@ class BlankFragment : Fragment() {
             bundle.putString("hukuiro",hukuiro)
             bundle.putString("hukuname",hukuname)
 
-
-
             fun stringToIntHash(input: String): Int {
                 // 文字列をハッシュコードに変換します
                 val hashCode = input.hashCode()
@@ -82,23 +80,27 @@ class BlankFragment : Fragment() {
             _hukuId = stringToIntHash(hukuname)
 
             val db = _helper.writableDatabase
-            val sqlInsert = "INSERT INTO clothesmemos (_id, clothes_name, clothes_type, clothes_color) VALUES (?, ?, ?, ?)"
-            val stmt = db.compileStatement(sqlInsert)
 
+            //主キーが同じ物を削除する
+            val sqlDelete = "DELETE FROM clothesmemos WHERE _id = ?"
+            var stmt = db.compileStatement(sqlDelete)
+            stmt.bindLong(1,_hukuId.toLong())
+            stmt.executeUpdateDelete()
+
+            //データベースに値を入力する
+            val sqlInsert = "INSERT INTO clothesmemos (_id, clothes_name, clothes_type, clothes_color) VALUES (?, ?, ?, ?)"
+            stmt = db.compileStatement(sqlInsert)
             stmt.bindLong(1,_hukuId.toLong())
             stmt.bindString(2,hukuname)
             stmt.bindString(3,hukusyu)
             stmt.bindString(4,hukuiro)
             stmt.executeInsert()
 
+            //MainFragmentに遷移する
             val transaction = parentFragmentManager.beginTransaction()
-
             transaction.setReorderingAllowed(true)
-
             transaction.addToBackStack("Only LIst")
-
             transaction.replace(R.id.MinFragment,MainFragment::class.java,bundle)
-
             transaction.commit()
 
         }

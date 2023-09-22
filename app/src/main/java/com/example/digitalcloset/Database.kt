@@ -16,7 +16,6 @@ class Database(context: Context):SQLiteOpenHelper(context,DATABASE_NAME,null,DAT
     }
     override fun onCreate(db:SQLiteDatabase){
 
-
         val sb = StringBuilder()
         sb.append("CREATE TABLE clothesmemos (")
         sb.append("_id INTEGER PRIMARY KEY,")

@@ -1,10 +1,29 @@
 package com.example.digitalcloset
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
-class RecyclerAdapter(private val list: List<YourDataModel>):RecyclerView.Adapter<OneViewHolder>() {
+class RecyclerAdapter(private val list: List<YourDataModel>):RecyclerView.Adapter<RecyclerAdapter.OneViewHolder>() {
+
+    inner class OneViewHolder(view: View):RecyclerView.ViewHolder(view) {
+
+        val clothe_id = view.findViewById<TextView>(R.id.ID)
+        val clothes_type = view.findViewById<TextView>(R.id.clothes_type)
+        val clothes_color = view.findViewById<TextView>(R.id.clothes_color)
+        val clothes_name = view.findViewById<TextView>(R.id.clothes_name)
+
+        init {
+            view.setOnClickListener{
+                val position = adapterPosition
+                val listpostion = list[position]
+            }
+        }
+
+
+    }
 
     //一行分のXMLとOneViewHolderを連結させる
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): OneViewHolder {

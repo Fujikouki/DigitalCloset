@@ -45,6 +45,7 @@ class MainFragment : Fragment() {
                 val nameColumnIndex = cursor.getColumnIndex("clothes_name")
                 val typeColumnIndex = cursor.getColumnIndex("clothes_type")
                 val colorColumnIndex = cursor.getColumnIndex("clothes_color")
+                val imageColumnIndex = cursor.getColumnIndex("clothes_image")
 
                 // カラムのインデックスが-1でないことを確認
                 if (idColumnIndex >= 0 && nameColumnIndex >= 0) {
@@ -52,9 +53,10 @@ class MainFragment : Fragment() {
                     val name = cursor.getString(nameColumnIndex)
                     val type = cursor.getString(typeColumnIndex)
                     val color = cursor.getString(colorColumnIndex)
+                    val image = cursor.getString(imageColumnIndex)
 
                     // 他の列も同様に取得
-                    val dataModel = YourDataModel(id, name, type, color)
+                    val dataModel = YourDataModel(id, name, type, color, image)
                     itemList.add(dataModel)
                 }
             }

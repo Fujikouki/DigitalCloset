@@ -144,12 +144,13 @@ class BlankFragment : Fragment() {
             stmt.executeUpdateDelete()
 
             //データベースに値を入力する
-            val sqlInsert = "INSERT INTO clothesmemos (_id, clothes_name, clothes_type, clothes_color) VALUES (?, ?, ?, ?)"
+            val sqlInsert = "INSERT INTO clothesmemos (_id, clothes_name, clothes_type, clothes_color, clothes_image) VALUES (?, ?, ?, ?, ?)"
             stmt = db.compileStatement(sqlInsert)
             stmt.bindLong(1,_hukuId.toLong())
             stmt.bindString(2,hukuname)
             stmt.bindString(3,hukusyu)
             stmt.bindString(4,hukuiro)
+            stmt.bindString(5,_imageUrl.toString())
             stmt.executeInsert()
 
             //MainFragmentに遷移する

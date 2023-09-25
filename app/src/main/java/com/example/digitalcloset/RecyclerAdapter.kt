@@ -1,8 +1,11 @@
 package com.example.digitalcloset
 
+import android.net.Uri
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
@@ -14,6 +17,7 @@ class RecyclerAdapter(private val list: List<YourDataModel>):RecyclerView.Adapte
         val clothes_type = view.findViewById<TextView>(R.id.clothes_type)
         val clothes_color = view.findViewById<TextView>(R.id.clothes_color)
         val clothes_name = view.findViewById<TextView>(R.id.clothes_name)
+        val clothes_image = view.findViewById<ImageView>(R.id.one_image)
 
         init {
             view.setOnClickListener{
@@ -44,6 +48,8 @@ class RecyclerAdapter(private val list: List<YourDataModel>):RecyclerView.Adapte
         holder.clothes_name.text = index.ClothesName
         holder.clothes_type.text = index.ClothesType
         holder.clothes_color.text = index.ClothesColor
+        holder.clothes_image.setImageURI(Uri.parse(index.ClothesImage))
+        Log.d("URLAd",Uri.parse(index.ClothesImage).toString())
 
     }
 }

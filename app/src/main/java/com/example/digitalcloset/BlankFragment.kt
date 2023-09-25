@@ -1,7 +1,13 @@
 package com.example.digitalcloset
 
+import android.app.Activity.RESULT_OK
+import android.content.ContentValues
 import android.content.Context
+import android.content.Intent
+import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Bundle
+import android.provider.MediaStore
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -9,10 +15,26 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageView
 import android.widget.Spinner
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.ActivityResultCallback
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.camera.core.ImageCapture
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
+import com.example.digitalcloset.databinding.FragmentBlankBinding
+import java.text.DateFormat
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 class BlankFragment : Fragment() {
 
+    private val _cameraLauncher = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult(),onActivityResultFromCamera()
+    )
+    private var _imageUrl:Uri? = null
 
     private lateinit var _helper: Database
     override fun onAttach(context: Context) {
@@ -34,13 +56,47 @@ class BlankFragment : Fragment() {
     ): View? {
 
         val rootView = inflater.inflate(R.layout.fragment_blank, container, false)
-
         val saveButton = rootView.findViewById<Button>(R.id.savebutton)
+        val ImageButton = rootView.findViewById<ImageView>(R.id.image_view)
         val listener = SaveListener()
-
+        val listener1 = CameraListner()
+        ImageButton.setOnClickListener(listener1)
         saveButton.setOnClickListener(listener)
-
         return rootView
+
+    }
+
+    private inner class CameraListner:View.OnClickListener{
+
+        override fun onClick(view: View) {
+            val now = Date()
+            val dateFormat = SimpleDateFormat("yyyyMMddHHmmss")
+            val nowStr = dateFormat.format(now)
+            Log.d("name",nowStr)
+            val fileName = "asd${nowStr}.jpg"
+            Log.d("faname",fileName)
+            val values = ContentValues()
+            values.put(MediaStore.Images.Media.TITLE, fileName)
+            values.put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg")
+            _imageUrl = requireActivity().contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,values)
+            Log.d("url",_imageUrl.toString())
+            val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+            intent.putExtra(MediaStore.EXTRA_OUTPUT,_imageUrl)
+            _cameraLauncher.launch(intent)
+        }
+    }
+
+
+    private inner class onActivityResultFromCamera:ActivityResultCallback<ActivityResult>{
+        override fun onActivityResult(result: ActivityResult) {
+            Log.d("カメラ",result.toString())
+            if(result.resultCode == RESULT_OK ){
+
+                val ini = view?.findViewById<ImageView>(R.id.image_view)
+                ini?.setImageURI(_imageUrl)
+
+            }
+        }
     }
 
     private inner class SaveListener:View.OnClickListener{
@@ -112,3 +168,4 @@ class BlankFragment : Fragment() {
     }
 
 }
+

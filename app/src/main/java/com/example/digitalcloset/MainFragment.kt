@@ -3,13 +3,17 @@ import android.content.Context
 import android.database.Cursor
 import android.os.Bundle
 import android.util.Log
+import android.view.ContextMenu
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import androidx.annotation.UiThread
 import androidx.annotation.WorkerThread
+import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import java.util.concurrent.Callable
@@ -18,7 +22,6 @@ import java.util.concurrent.Executors
 class MainFragment : Fragment() {
 
     private lateinit var _helper: Database
-    private lateinit var cursor: Cursor
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -36,7 +39,6 @@ class MainFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
 
         val rootView = inflater.inflate(R.layout.fragment_main, container, false)
         val bcButton = rootView.findViewById<Button>(R.id.bcButton)
@@ -61,34 +63,10 @@ class MainFragment : Fragment() {
     private  inner class DbReference():Callable<List<YourDataModel>>{
         @WorkerThread
         override fun call(): List<YourDataModel>{
-            val itemList = mutableListOf<YourDataModel>()
-            try {
-                val db = _helper.readableDatabase
-                val query = "SELECT * FROM clothesmemos"
-                cursor = db.rawQuery(query, null)
-                while (cursor.moveToNext()) {
-                    val idColumnIndex = cursor.getColumnIndex("_id")
-                    val nameColumnIndex = cursor.getColumnIndex("clothes_name")
-                    val typeColumnIndex = cursor.getColumnIndex("clothes_type")
-                    val colorColumnIndex = cursor.getColumnIndex("clothes_color")
-                    val imageColumnIndex = cursor.getColumnIndex("clothes_image")
 
-                    // カラムのインデックスが-1でないことを確認
-                    if (idColumnIndex >= 0 && nameColumnIndex >= 0) {
-                        val id = cursor.getLong(idColumnIndex)
-                        val name = cursor.getString(nameColumnIndex)
-                        val type = cursor.getString(typeColumnIndex)
-                        val color = cursor.getString(colorColumnIndex)
-                        val image = cursor.getString(imageColumnIndex)
-                        // 他の列も同様に取得
-                        val dataModel = YourDataModel(id, name, type, color, image)
-                        itemList.add(dataModel)
-                    }
-                }
-            } finally {
-                cursor.close() // カーソルを閉じる
-            }
-            return itemList
+            val Dbcloth = DbRelated(requireContext())
+
+            return Dbcloth.DbShow()
         }
     }
 
@@ -97,10 +75,8 @@ class MainFragment : Fragment() {
             parentFragmentManager.popBackStack()
         }
     }
-
     override fun onDestroyView() {
         super.onDestroyView()
         // カーソルをクリーンアップ
-        cursor?.close()
     }
 }

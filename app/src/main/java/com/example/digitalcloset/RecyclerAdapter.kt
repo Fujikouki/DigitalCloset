@@ -1,14 +1,17 @@
 package com.example.digitalcloset
 
 import android.net.Uri
+import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import androidx.fragment.app.FragmentManager
 
 class RecyclerAdapter(private val list: List<YourDataModel>):RecyclerView.Adapter<RecyclerAdapter.OneViewHolder>() {
 
@@ -52,6 +55,15 @@ class RecyclerAdapter(private val list: List<YourDataModel>):RecyclerView.Adapte
         Glide.with(holder.itemView.getContext()).load(Uri.parse(index.ClothesImage)).into(holder.clothes_image)
         //holder.clothes_image.setImageURI(Uri.parse(index.ClothesImage))
         Log.d("URLAd",Uri.parse(index.ClothesImage).toString())
+        holder.itemView.setOnClickListener(){
+            val fragmentManager = (holder.itemView.context as AppCompatActivity).supportFragmentManager
+            val doalogFragment = ItemFragment()
+            val args = Bundle()
+            args.putString("id",index.id.toString())
+            doalogFragment.setArguments(args);
+            doalogFragment.show(fragmentManager,"ItemFragment")
+
+        }
 
     }
 }

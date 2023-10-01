@@ -17,6 +17,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.Spinner
+import android.widget.Toast
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.ActivityResultCallback
 import androidx.activity.result.contract.ActivityResultContracts
@@ -30,6 +31,8 @@ import java.util.Date
 import java.util.Locale
 
 class BlankFragment : Fragment() {
+
+    var flag = false
 
     private val _cameraLauncher = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult(),onActivityResultFromCamera()
@@ -46,10 +49,8 @@ class BlankFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-
         }
     }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -61,13 +62,14 @@ class BlankFragment : Fragment() {
         val listener = SaveListener()
         val listener1 = CameraListner()
         ImageButton.setOnClickListener(listener1)
-        saveButton.setOnClickListener(listener)
+            saveButton.setOnClickListener(listener)
+
+
         return rootView
 
     }
 
     private inner class CameraListner:View.OnClickListener{
-
         override fun onClick(view: View) {
             val now = Date()
             val dateFormat = SimpleDateFormat("yyyyMMddHHmmss")
@@ -86,7 +88,6 @@ class BlankFragment : Fragment() {
         }
     }
 
-
     private inner class onActivityResultFromCamera:ActivityResultCallback<ActivityResult>{
         override fun onActivityResult(result: ActivityResult) {
             Log.d("カメラ",result.toString())
@@ -94,7 +95,7 @@ class BlankFragment : Fragment() {
 
                 val ini = view?.findViewById<ImageView>(R.id.image_view)
                 ini?.setImageURI(_imageUrl)
-
+                flag = true
             }
         }
     }
@@ -102,63 +103,57 @@ class BlankFragment : Fragment() {
     private inner class SaveListener:View.OnClickListener{
         override fun onClick(view: View?) {
 
-//            Log.d("save", view.toString())
+            if (flag == true){
 
-            val hukuSpsyu = view?.findViewById<Spinner>(R.id.spinner_huku) ?: requireView().findViewById(R.id.spinner_huku)
-            val hukuSpiro = view?.findViewById<Spinner>(R.id.spinner_iro) ?: requireView().findViewById(R.id.spinner_iro)
-            val hukuEdit = requireView().findViewById<EditText>(R.id.huku_name)
+                val hukuSpsyu = requireView().findViewById<Spinner>(R.id.spinner_huku)
+                val hukuSpiro = requireView().findViewById<Spinner>(R.id.spinner_iro)
+                val hukuEdit = requireView().findViewById<EditText>(R.id.huku_name)
 
-            val hukusyu:String
-            val hukuiro:String
-            val hukuname:String
+                val hukusyu:String
+                val hukuiro:String
+                val hukuname:String
 
-            hukusyu = hukuSpsyu.selectedItem.toString()
-            hukuiro = hukuSpiro.selectedItem.toString()
-            hukuname = hukuEdit.text.toString()
-            Log.d("seikou",hukuiro)
-            Log.d("seikou",hukusyu)
-            Log.d("seikou",hukuname)
+                hukusyu = hukuSpsyu.selectedItem.toString()
+                hukuiro = hukuSpiro.selectedItem.toString()
+                hukuname = hukuEdit.text.toString()
+                Log.d("seikou",hukuiro)
+                Log.d("seikou",hukusyu)
+                Log.d("seikou",hukuname)
 
-            val bundle = Bundle()
+                val bundle = Bundle()
 
-            bundle.putString("hukusyu",hukusyu)
-            bundle.putString("hukuiro",hukuiro)
-            bundle.putString("hukuname",hukuname)
+                bundle.putString("hukusyu",hukusyu)
+                bundle.putString("hukuiro",hukuiro)
+                bundle.putString("hukuname",hukuname)
 
-            fun stringToIntHash(input: String): Int {
-                // 文字列をハッシュコードに変換します
-                val hashCode = input.hashCode()
+                fun stringToIntHash(input: String): Int {
+                    // 文字列をハッシュコードに変換します
+                    val hashCode = input.hashCode()
 
-                // ハッシュコードをINT型の範囲に収める
-                return hashCode and Int.MAX_VALUE
+                    // ハッシュコードをINT型の範囲に収める
+                    return hashCode and Int.MAX_VALUE
+                }
+
+                _hukuId = stringToIntHash(hukuname)
+
+                val Dbcloth = DbRelated(requireContext())
+
+                Dbcloth.Dbdeletion(_hukuId.toString())
+
+                Dbcloth.DbAddition(_hukuId.toString(),hukuname,hukusyu,hukuiro,_imageUrl)
+
+                //MainFragmentに遷移する
+                val transaction = parentFragmentManager.beginTransaction()
+                transaction.setReorderingAllowed(true)
+                transaction.addToBackStack("Only LIst")
+                transaction.replace(R.id.MinFragment,MainFragment::class.java,bundle)
+                transaction.commit()
+
+                flag = false
+
+            }else{
+                Toast.makeText(requireContext(),"写真を登録して",Toast.LENGTH_SHORT).show()
             }
-
-            _hukuId = stringToIntHash(hukuname)
-
-            val db = _helper.writableDatabase
-
-            //主キーが同じ物を削除する
-            val sqlDelete = "DELETE FROM clothesmemos WHERE _id = ?"
-            var stmt = db.compileStatement(sqlDelete)
-            stmt.bindLong(1,_hukuId.toLong())
-            stmt.executeUpdateDelete()
-
-            //データベースに値を入力する
-            val sqlInsert = "INSERT INTO clothesmemos (_id, clothes_name, clothes_type, clothes_color, clothes_image) VALUES (?, ?, ?, ?, ?)"
-            stmt = db.compileStatement(sqlInsert)
-            stmt.bindLong(1,_hukuId.toLong())
-            stmt.bindString(2,hukuname)
-            stmt.bindString(3,hukusyu)
-            stmt.bindString(4,hukuiro)
-            stmt.bindString(5,_imageUrl.toString())
-            stmt.executeInsert()
-
-            //MainFragmentに遷移する
-            val transaction = parentFragmentManager.beginTransaction()
-            transaction.setReorderingAllowed(true)
-            transaction.addToBackStack("Only LIst")
-            transaction.replace(R.id.MinFragment,MainFragment::class.java,bundle)
-            transaction.commit()
 
         }
     }

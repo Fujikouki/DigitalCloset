@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 
 class RecyclerAdapter(private val list: List<YourDataModel>):RecyclerView.Adapter<RecyclerAdapter.OneViewHolder>() {
 
@@ -48,7 +49,8 @@ class RecyclerAdapter(private val list: List<YourDataModel>):RecyclerView.Adapte
         holder.clothes_name.text = index.ClothesName
         holder.clothes_type.text = index.ClothesType
         holder.clothes_color.text = index.ClothesColor
-        holder.clothes_image.setImageURI(Uri.parse(index.ClothesImage))
+        Glide.with(holder.itemView.getContext()).load(Uri.parse(index.ClothesImage)).into(holder.clothes_image)
+        //holder.clothes_image.setImageURI(Uri.parse(index.ClothesImage))
         Log.d("URLAd",Uri.parse(index.ClothesImage).toString())
 
     }

@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import androidx.annotation.UiThread
 import androidx.annotation.WorkerThread
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -27,7 +28,7 @@ class MainFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            // 引数の処理が必要な場合はここに記述
+
         }
     }
 
@@ -48,6 +49,7 @@ class MainFragment : Fragment() {
         return rootView
     }
 
+    @UiThread
     private fun DbConnection():List<YourDataModel>{
         val backgroundReceiver = DbReference()
         val executeService = Executors.newSingleThreadExecutor()
